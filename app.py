@@ -16,50 +16,37 @@ app.secret_key = os.urandom(32)
 def root():
     # check if logged in
     if not 'loggedin?' in session:
-        session['loggedin?'] = True;
         return render_template('form.html', text = 'Please enter your login')
+    if session['loggedin?']:
+        return render_template('form.html', text = 'Please enter your login')
+
     # has session data already
     return redirect(url_for("login"))
 
-
+# get here through form.html
 @app.route("/login", methods = ["POST", "GET"])
 def login():
-    # default (you got here by accident)
-    if not 'loggedin?' in session:
-        session["loggedin?"] = True;
-        return render_template('form.html', text = 'Please enter your login')
-
-    # logged in means there's form data
-    if session['loggedin?']:
-        session['user'] = request.form.get("username")
-        session['pass'] = request.form.get("password")
-
     # check credentials
     usercheck = False
     passcheck = False
-    if 'username' in session:
-        if (session["user"] == "mr brown"):
+    if request.form.get("username") == "brown":
             usercheck = True
-    if 'password' in session:
-        if (session["pass"] == "13"):
+    if request.form.get("password") == "13":
             passcheck = True
 
     if (usercheck and passcheck):
+        session['loggedin?'] = True
         return redirect("/welcome")
     elif(usercheck and not passcheck):
-        session['loggedin?'] = True
         return render_template('form.html', text = "wrong password")
     elif(not usercheck and passcheck):
-        session['loggedin?'] = True
         return render_template('form.html', text = "wrong username")
-    session['loggedin?'] = True
     return render_template('form.html', text = "wrong username and password")
 
 
 @app.route("/welcome")
 def welcome():
-    user = session.get('user')
-    return render_template("welcome.html", username = user)
+    return render_template("welcome.html", username = "Mr Brown")
 
 @app.route("/signout")
 def signout():
