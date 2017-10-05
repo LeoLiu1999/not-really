@@ -5,14 +5,16 @@
   </head>
   <body>
     <h1>FILL ME OUT!!!</h1>
-    <form action="result">
+    {{text}}
+    <br>
+    <form action="login" method="post">
       Username:
       <br>
-      <input type="text" name="username">
+      <input type="text" name="username" required>
       <br><br>
       Password:
       <br>
-      <input type="text" name="password">
+      <input type="password" name="password" required>
       </br><br>
       <input type="submit" value="Submit">
     </form>
