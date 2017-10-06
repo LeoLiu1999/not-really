@@ -19,7 +19,7 @@ def root():
         session["loggedin?"] = False
 
     if session['loggedin?']:
-        return redirect(url_for("welcome"))
+        return redirect("/welcome")
 
     # need user data
     return render_template('form.html', text = 'Please enter your login')
