@@ -25,7 +25,7 @@ def root():
     return render_template('form.html', text = 'Please enter your login')
 
 # get here through form.html
-@app.route("/login", methods = ["POST", "GET"])
+@app.route("/login")
 def login():
     # check credentials
     usercheck = False
