@@ -16,12 +16,13 @@ app.secret_key = os.urandom(32)
 def root():
     # check if logged in
     if not 'loggedin?' in session:
-        return render_template('form.html', text = 'Please enter your login')
-    if session['loggedin?']:
-        return render_template('form.html', text = 'Please enter your login')
+        session["loggedin?"] = False
 
-    # has session data already
-    return redirect(url_for("login"))
+    if session['loggedin?']:
+        return redirect(url_for("welcome"))
+
+    # need user data
+    return render_template('form.html', text = 'Please enter your login')
 
 # get here through form.html
 @app.route("/login", methods = ["POST", "GET"])
@@ -29,6 +30,7 @@ def login():
     # check credentials
     usercheck = False
     passcheck = False
+    session["user"] = request.form.get("username")
     if request.form.get("username") == "brown":
             usercheck = True
     if request.form.get("password") == "13":
@@ -40,19 +42,18 @@ def login():
     elif(usercheck and not passcheck):
         return render_template('form.html', text = "wrong password")
     elif(not usercheck and passcheck):
-        return render_template('form.html', text = "wrong username")
+        return render_template('form.html', text = "wrong username" + sessio)
     return render_template('form.html', text = "wrong username and password")
 
 
 @app.route("/welcome")
 def welcome():
-    return render_template("welcome.html", username = "Mr Brown")
+    return render_template("welcome.html", username = session['user'])
 
 @app.route("/signout")
 def signout():
     session.pop("user")
-    session.pop("pass")
-    session['loggedin?'] = False
+    session.pop("loggedin?")
     return redirect("/")
 
 def debug():
