@@ -25,7 +25,7 @@ def root():
     return render_template('form.html', text = 'Please enter your login')
 
 # get here through form.html
-@app.route("/login")
+@app.route("/login", methods = ["POST", "GET"])
 def login():
     # check credentials
     usercheck = False
@@ -42,7 +42,7 @@ def login():
     elif(usercheck and not passcheck):
         return render_template('form.html', text = "wrong password")
     elif(not usercheck and passcheck):
-        return render_template('form.html', text = "wrong username" + sessio)
+        return render_template('form.html', text = "wrong username")
     return render_template('form.html', text = "wrong username and password")
 
 
